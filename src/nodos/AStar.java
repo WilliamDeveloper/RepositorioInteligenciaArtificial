@@ -7,8 +7,8 @@ public class AStar {
 
     public static void main(String args[]) {
 
-        Node vNodoOrigem = Global_.vListaDeNodos.get(6);
-        Node vNodoDestino = Global_.vListaDeNodos.get(0);
+        Node vNodoOrigem = Global_.vListaDeNodos.get(0);
+        Node vNodoDestino = Global_.vListaDeNodos.get(6);
 
         ArrayList<Node> vListaAbertaFronteira = new ArrayList();
         ArrayList<Node> vListaFechadaVisitados = new ArrayList();
@@ -32,14 +32,16 @@ public class AStar {
             vNodePaiAtual.doLogMostrarMyValues();//teste
 
             if (vNodePaiAtual.isDestino()) {
-                System.out.println("teste-> destino");
+                System.out.println("###########-> destino <-##################");
+                vNodePaiAtual.doLogMostrarMyValues();//teste
+                System.out.println("##########################################");
                 return;
             } else {
                 Node vNodeFinalDesttino = doForEachSucessorAdjAoNodePai(vNodePaiAtual, pListaAbertaFronteira, pListaFechadaVisitados, pDestino);
-                if ( vNodeFinalDesttino != null){
-                 //exibir caminho
+                if (vNodeFinalDesttino != null) {
+                    //exibir caminho
+                    System.out.println("//exibir caminho percorrido!!");
                     Node.doMostrarInfoCaminho(pOrigem, vNodeFinalDesttino);
-                    System.out.println("//exibir caminho");
                     return;
                 }
                 pListaFechadaVisitados.add(vNodePaiAtual);
@@ -47,8 +49,8 @@ public class AStar {
             }
         }
     }
+    
 //################################################################
-
     private static Node doGetNodeComMenorCustoF(ArrayList<Node> pListaAbertaFronteira) {
         Collections.sort(pListaAbertaFronteira);
         Node vNode = pListaAbertaFronteira.remove(0);
@@ -64,7 +66,10 @@ public class AStar {
             Collections.sort(pListaAbertaFronteira);
 
             if (vNodeSucessorAdjAtual.isDestino()) {
-                System.out.println("teste-> destino: "+vNodeSucessorAdjAtual.vNome);
+                System.out.println("###########-> destino <-##################");
+                vNodeSucessorAdjAtual.doLogMostrarMyValues();//teste
+                System.out.println("##########################################");
+                
                 return vNodeSucessorAdjAtual;
             }
 
@@ -72,7 +77,7 @@ public class AStar {
                 continue;
             } else if (vNodeSucessorAdjAtual.isProcuraSeEstaNaLista(pListaAbertaFronteira) == false) {
                 pListaAbertaFronteira.add(vNodeSucessorAdjAtual);
-            }            
+            }
         }//fim for
         return null;
     }

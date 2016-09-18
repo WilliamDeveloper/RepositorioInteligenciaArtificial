@@ -1,7 +1,6 @@
 package nodos;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -14,7 +13,7 @@ public class LeitorCSV {
 //#############################################################################
     public static ArrayList doLerCSV_nodos(String pCaminhoDoArquivo) {
         BufferedReader vReader = null;
-        //String vCaminhoDoArquivo = new File("src").getAbsolutePath() + "\\nodos\\nodos.csv";
+        
         try {
             vReader = new BufferedReader(new FileReader(pCaminhoDoArquivo));
         } catch (FileNotFoundException ex) {
