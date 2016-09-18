@@ -21,8 +21,8 @@ class Node implements Comparable<Node> {
     public boolean vVisited;
 
     //public ArrayList<Node> vListVerticeAdj = new ArrayList<Node>();
-    public ArrayList<String> vListVerticeAdj = new ArrayList<String>();
-    public ArrayList<Integer> vListVerticeAdjCusto = new ArrayList<Integer>();
+    public ArrayList<String> vListNodeSucessorAdj = new ArrayList<String>();
+    public ArrayList<Integer> vListNodeSucessorAdjCusto = new ArrayList<Integer>();
     public int vDistanciaVerticeAtualParaDestino2;
 
     //############################################################################
@@ -68,7 +68,7 @@ class Node implements Comparable<Node> {
     //############################################################################    
     public void doCalcularCusto(Node vNodePaiAtual, Node vNodeDestino) {
         this.vCalculoNode.vNodePai = vNodePaiAtual;
-        this.vCalculoNode.vCustoG_PaiToAdj = Node.doGetDistancia(vNodePaiAtual, this);
+        this.vCalculoNode.vCustoG_PaiToAdj = vNodePaiAtual.vCalculoNode.vCustoG_PaiToAdj + Node.doGetDistancia(vNodePaiAtual, this);
         this.vCalculoNode.vCustoH_AdjToAlvo = Node.doGetDistancia(this, vNodeDestino);
         this.vCalculoNode.vCustoF = this.vCalculoNode.vCustoG_PaiToAdj + this.vCalculoNode.vCustoH_AdjToAlvo;
     }
@@ -80,8 +80,8 @@ class Node implements Comparable<Node> {
         pilha.add(vNodeDestino);
         Node vNodeAnterior = vNodeDestino.vCalculoNode.vNodePai;
 
-        System.out.println("vNodeOrigem" + vNodeOrigem.vNome);
-        System.out.println("vNodeDestino" + vNodeDestino.vNome);
+        System.out.println("vNodeOrigem " + vNodeOrigem.vNome);
+        System.out.println("vNodeDestino " + vNodeDestino.vNome);
 
         while (vNodeAnterior.vNome.equals(vNodeOrigem.vNome) == false) {
             pilha.add(vNodeAnterior);
@@ -111,11 +111,16 @@ class Node implements Comparable<Node> {
 
         return vDistancia;
     }
+    
 //#########################################################################
-
     Node doGetVerticeAdj(int i) {
-        int vNomeVertice  = (Integer.valueOf(this.vListVerticeAdj.get(i))-1);
+        int vNomeVertice  = (Integer.valueOf(this.vListNodeSucessorAdj.get(i))-1);
         return Global_.vListaDeNodos.get(vNomeVertice);
+    }
+   
+//#########################################################################
+    public void doLogMostrarMyValues(){
+        System.out.println("x,y["+this.vX+","+this.vY+"] - "+this.vNome + " -> F["+this.vCalculoNode.vCustoF+ "] = G["+this.vCalculoNode.vCustoG_PaiToAdj+ "] + H["+this.vCalculoNode.vCustoH_AdjToAlvo+"]");
     }
     
 }

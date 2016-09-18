@@ -47,7 +47,7 @@ public class LeitorCSV {
                     if (3 < vLinhaSeparada.length) {
                         String[] vNodosAdj = vLinhaSeparada[3].split("#");
                         
-                        nodo.vListVerticeAdj = new ArrayList(Arrays.asList(vNodosAdj));
+                        nodo.vListNodeSucessorAdj = new ArrayList(Arrays.asList(vNodosAdj));
                         
                     }
                     vListaDeNodos.add(nodo);
@@ -73,7 +73,7 @@ public class LeitorCSV {
         ArrayList<Node> vListaDeNodos = Global_.vListaDeNodos;
 
         for (Node vNode : vListaDeNodos) {
-            System.out.println("teste - " + vNode.vNome + " count nodos adj " + vNode.vListVerticeAdj.size() + " ");
+            System.out.println("teste - " + vNode.vNome + " count nodos adj " + vNode.vListNodeSucessorAdj.size() + " ");
         }
 
     }

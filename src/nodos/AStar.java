@@ -3,87 +3,78 @@ package nodos;
 import java.util.ArrayList;
 import java.util.Collections;
 
-
 public class AStar {
 
     public static void main(String args[]) {
 
-        Node vNodoOrigem = Global_.vListaDeNodos.get(0);
-        Node vNodoDestino = Global_.vListaDeNodos.get(6);
+        Node vNodoOrigem = Global_.vListaDeNodos.get(6);
+        Node vNodoDestino = Global_.vListaDeNodos.get(0);
 
         ArrayList<Node> vListaAbertaFronteira = new ArrayList();
-        ArrayList<Node> vListaFechadaVisitados = new ArrayList();        
+        ArrayList<Node> vListaFechadaVisitados = new ArrayList();
 
-        doEncontrarCaminho(vNodoOrigem, vNodoDestino, vListaAbertaFronteira, vListaFechadaVisitados);
+        AStar.doEncontrarCaminho(vNodoOrigem, vNodoDestino, vListaAbertaFronteira, vListaFechadaVisitados);
 
     }
 
 //#########################################################################
-
     public static void doEncontrarCaminho(Node pOrigem, Node pDestino, ArrayList<Node> pListaAbertaFronteira, ArrayList<Node> pListaFechadaVisitados) {
-     
+        pOrigem.doCalcularCusto(pOrigem, pDestino);
         pListaAbertaFronteira.add(pOrigem);
 
         Node vNodePaiAtual;
         Node vNodeFinalDestino = null;
 
         while (pListaAbertaFronteira.isEmpty() == false) {
-            
-            Collections.sort(pListaAbertaFronteira);            
-            vNodePaiAtual = pListaAbertaFronteira.remove(0);      
-            vNodePaiAtual.vVisited = true;
-            pListaFechadaVisitados.add(vNodePaiAtual);
-            System.out.println(vNodePaiAtual.vNome);
 
-            doExpandirAdjNaFronteira(vNodePaiAtual, pListaAbertaFronteira, pListaFechadaVisitados, pDestino);
+            vNodePaiAtual = doGetNodeComMenorCustoF(pListaAbertaFronteira);
 
-            boolean tmp_nodeDestino = false;
+            vNodePaiAtual.doLogMostrarMyValues();//teste
 
-            for (Node vNode : pListaAbertaFronteira) {
-                if (vNode.isDestino()) {
-                    pListaAbertaFronteira.remove(vNode);
-                    pListaFechadaVisitados.add(vNode);
-                    vNodeFinalDestino = vNode;
-                    tmp_nodeDestino = true;
-                    break;
+            if (vNodePaiAtual.isDestino()) {
+                System.out.println("teste-> destino");
+                return;
+            } else {
+                Node vNodeFinalDesttino = doForEachSucessorAdjAoNodePai(vNodePaiAtual, pListaAbertaFronteira, pListaFechadaVisitados, pDestino);
+                if ( vNodeFinalDesttino != null){
+                 //exibir caminho
+                    Node.doMostrarInfoCaminho(pOrigem, vNodeFinalDesttino);
+                    System.out.println("//exibir caminho");
+                    return;
                 }
+                pListaFechadaVisitados.add(vNodePaiAtual);
+                vNodePaiAtual.vVisited = true;
             }
-
-            if (tmp_nodeDestino == true) {
-                Node.doMostrarInfoCaminho(pOrigem,vNodeFinalDestino);
-                break;
-            }else{
-            
-            }
-            
-
         }
     }
 //################################################################
 
-    private static void doExpandirAdjNaFronteira(Node vNodePaiAtual, ArrayList<Node> pListaAbertaFronteira,ArrayList<Node> pListaFechadaVisitados, Node pDestino) {
-        for (int i = 0; i < vNodePaiAtual.vListVerticeAdj.size(); i++) {
-            
-            Node vNodoAdjacenteAtual = vNodePaiAtual.doGetVerticeAdj(i);
-            
-            if (vNodoAdjacenteAtual.isProcuraSeEstaNaLista(pListaFechadaVisitados) == true) {
-                continue;
-            } else if (vNodoAdjacenteAtual.isProcuraSeEstaNaLista(pListaAbertaFronteira) == false) {
-                pListaAbertaFronteira.add(vNodoAdjacenteAtual);
-                
-                vNodoAdjacenteAtual.doCalcularCusto(vNodePaiAtual, pDestino);
-                Collections.sort(pListaAbertaFronteira);
-            } else {
-                /*
-                double tmp_vCustoG = Node.doGetDistancia(vNodePaiAtual, vNodoAdjacenteAtual);
-                System.out.println("oi");
-                if (tmp_vCustoG < vNodoAdjacenteAtual.vCalculoNode.vCustoG_PaiToAdj && tmp_vCustoG > 0) {
-                  //  vNodoAdjacenteAtual.doCalcularCusto(vNodePaiAtual, pDestino);
-                    Collections.sort(pListaAbertaFronteira);
-                }
-*/
+    private static Node doGetNodeComMenorCustoF(ArrayList<Node> pListaAbertaFronteira) {
+        Collections.sort(pListaAbertaFronteira);
+        Node vNode = pListaAbertaFronteira.remove(0);
+        return vNode;
+    }
+//################################################################
+
+    private static Node doForEachSucessorAdjAoNodePai(Node vNodePaiAtual, ArrayList<Node> pListaAbertaFronteira, ArrayList<Node> pListaFechadaVisitados, Node pDestino) {
+        for (int i = 0; i < vNodePaiAtual.vListNodeSucessorAdj.size(); i++) {
+
+            Node vNodeSucessorAdjAtual = vNodePaiAtual.doGetVerticeAdj(i);
+            vNodeSucessorAdjAtual.doCalcularCusto(vNodePaiAtual, pDestino);
+            Collections.sort(pListaAbertaFronteira);
+
+            if (vNodeSucessorAdjAtual.isDestino()) {
+                System.out.println("teste-> destino: "+vNodeSucessorAdjAtual.vNome);
+                return vNodeSucessorAdjAtual;
             }
+
+            if (vNodeSucessorAdjAtual.isProcuraSeEstaNaLista(pListaFechadaVisitados) == true) {
+                continue;
+            } else if (vNodeSucessorAdjAtual.isProcuraSeEstaNaLista(pListaAbertaFronteira) == false) {
+                pListaAbertaFronteira.add(vNodeSucessorAdjAtual);
+            }            
         }//fim for
+        return null;
     }
 
 }
