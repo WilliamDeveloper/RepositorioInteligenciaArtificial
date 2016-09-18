@@ -8,9 +8,7 @@ public class CalculoDistancia {
     }
     
     public static void main(String[] args) {
-        Nodo nodoA = new Nodo(0,1,);
-        Nodo nodoB = new Nodo();
-        
+
     }
     
 }
