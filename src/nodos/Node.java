@@ -114,7 +114,7 @@ class Node implements Comparable<Node> {
 //#########################################################################
 
     Node doGetVerticeAdj(int i) {
-        int vNomeVertice  = Integer.valueOf(this.vListVerticeAdj.get(i));
+        int vNomeVertice  = (Integer.valueOf(this.vListVerticeAdj.get(i))-1);
         return Global_.vListaDeNodos.get(vNomeVertice);
     }
     

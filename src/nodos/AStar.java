@@ -20,7 +20,7 @@ public class AStar {
 
 //#########################################################################
 
-    private static void doEncontrarCaminho(Node pOrigem, Node pDestino, ArrayList<Node> pListaAbertaFronteira, ArrayList<Node> pListaFechadaVisitados) {
+    public static void doEncontrarCaminho(Node pOrigem, Node pDestino, ArrayList<Node> pListaAbertaFronteira, ArrayList<Node> pListaFechadaVisitados) {
      
         pListaAbertaFronteira.add(pOrigem);
 
@@ -28,32 +28,14 @@ public class AStar {
         Node vNodeFinalDestino = null;
 
         while (pListaAbertaFronteira.isEmpty() == false) {
+            
             Collections.sort(pListaAbertaFronteira);            
-            vNodePaiAtual = pListaAbertaFronteira.remove(0);
+            vNodePaiAtual = pListaAbertaFronteira.remove(0);      
             vNodePaiAtual.vVisited = true;
             pListaFechadaVisitados.add(vNodePaiAtual);
             System.out.println(vNodePaiAtual.vNome);
 
-            for (int i = 0; i < vNodePaiAtual.vListVerticeAdj.size(); i++) {
-                
-                Node vNodoAdjacenteAtual = vNodePaiAtual.doGetVerticeAdj(i);
-                
-                if (vNodoAdjacenteAtual.isProcuraSeEstaNaLista(pListaFechadaVisitados) == true) {
-                    continue;
-                } else if (vNodoAdjacenteAtual.isProcuraSeEstaNaLista(pListaAbertaFronteira) == false) {
-                    pListaAbertaFronteira.add(vNodoAdjacenteAtual);
-
-                    vNodoAdjacenteAtual.doCalcularCusto(vNodePaiAtual, pDestino);
-                    Collections.sort(pListaAbertaFronteira);
-                } else {
-                    double tmp_vCustoG = Node.doGetDistancia(vNodePaiAtual, vNodoAdjacenteAtual);
-                    
-                    if (tmp_vCustoG < vNodoAdjacenteAtual.vCalculoNode.vCustoG_PaiToAdj && tmp_vCustoG > 0) {
-                        vNodoAdjacenteAtual.doCalcularCusto(vNodePaiAtual, pDestino);
-                        Collections.sort(pListaAbertaFronteira);
-                    }
-                }
-            }//fim for
+            doExpandirAdjNaFronteira(vNodePaiAtual, pListaAbertaFronteira, pListaFechadaVisitados, pDestino);
 
             boolean tmp_nodeDestino = false;
 
@@ -78,5 +60,30 @@ public class AStar {
         }
     }
 //################################################################
+
+    private static void doExpandirAdjNaFronteira(Node vNodePaiAtual, ArrayList<Node> pListaAbertaFronteira,ArrayList<Node> pListaFechadaVisitados, Node pDestino) {
+        for (int i = 0; i < vNodePaiAtual.vListVerticeAdj.size(); i++) {
+            
+            Node vNodoAdjacenteAtual = vNodePaiAtual.doGetVerticeAdj(i);
+            
+            if (vNodoAdjacenteAtual.isProcuraSeEstaNaLista(pListaFechadaVisitados) == true) {
+                continue;
+            } else if (vNodoAdjacenteAtual.isProcuraSeEstaNaLista(pListaAbertaFronteira) == false) {
+                pListaAbertaFronteira.add(vNodoAdjacenteAtual);
+                
+                vNodoAdjacenteAtual.doCalcularCusto(vNodePaiAtual, pDestino);
+                Collections.sort(pListaAbertaFronteira);
+            } else {
+                /*
+                double tmp_vCustoG = Node.doGetDistancia(vNodePaiAtual, vNodoAdjacenteAtual);
+                System.out.println("oi");
+                if (tmp_vCustoG < vNodoAdjacenteAtual.vCalculoNode.vCustoG_PaiToAdj && tmp_vCustoG > 0) {
+                  //  vNodoAdjacenteAtual.doCalcularCusto(vNodePaiAtual, pDestino);
+                    Collections.sort(pListaAbertaFronteira);
+                }
+*/
+            }
+        }//fim for
+    }
 
 }
