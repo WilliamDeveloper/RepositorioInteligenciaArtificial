@@ -1,0 +1,7 @@
+https://github.com/WilliamDeveloper/RepositorioInteligenciaArtificial/tree/master/src/csharp_astar
+
+baixar o arquivo IA-aStar-Mapa-node.7z
+
+dentro dele tera as classe da logica do programa dentro de 
+
+\IA-aStar-Mapa-node\IA Mapa\Assets\Scripts
